@@ -36,3 +36,8 @@ maybeToList x = case x of
 ------------------
 -- * Exercise 9.5
 ------------------
+-- Zip utilizes recursion to match the head of both lists into a tuple, until the pattern of an empty list is reached in either or both lists, terminating the recursion and returning the list of tuples.
+
+------------------
+-- * Exercise 9.6
+------------------
