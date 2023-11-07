@@ -41,3 +41,6 @@ maybeToList x = case x of
 ------------------
 -- * Exercise 9.6
 ------------------
+-- Define function zip' that turns a pair of lists into list of pairs (hint: use curry or uncurry)
+zip' :: ([a], [b]) -> [(a, b)]
+zip' (x,y) = uncurry zip (x,y)
