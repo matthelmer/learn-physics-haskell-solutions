@@ -44,3 +44,23 @@ maybeToList x = case x of
 -- Define function zip' that turns a pair of lists into list of pairs (hint: use curry or uncurry)
 zip' :: ([a], [b]) -> [(a, b)]
 zip' (x,y) = uncurry zip (x,y)
+
+------------------
+-- * Exercise 9.7
+------------------
+-- The dot operator (.) is for function composition. Doing unzip followed by zip', we have a function with type signature:
+-- zip' . unzip :: [(a,b)] -> [(a,b)]
+-- Is this the identity function? Justify answer. If we do zip' followed by unzip, we have:
+-- unzip . zip' :: ([a],[b]) -> ([a],[b])
+-- Is this identify function?
+-- Answer: In neither case can we be sure that they are identity functions, simply because information may be lost when the input lengths are not the same length.
+
+------------------
+-- * Exercise 9.8
+------------------
+-- show how to use the lookup function to produce the value Just 89, and the value Nothing
+grades :: [(String, Int)]
+grades = [ ("Albert Einstein", 89)
+         , ("Isaac Newton"  , 85)
+         , ("Alan Turing"   , 91)
+         ]
