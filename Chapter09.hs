@@ -86,3 +86,11 @@ tvPairs :: [(R,R)]
 tvPairs = iterate tvUpdate (0,0)
 tvUpdate :: (R,R) -> (R,R)
 tvUpdate (t,v) = (t+1,v+5)
+
+------------------
+-- * Exercise 9.11
+------------------
+fibHelper :: [(Int,Int)]
+fibHelper = iterate (\(a,b) -> (b, a + b)) (0,1)
+fibonacci :: [Int]
+fibonacci = map snd fibHelper
