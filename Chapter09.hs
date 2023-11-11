@@ -94,3 +94,17 @@ fibHelper :: [(Int,Int)]
 fibHelper = iterate (\(a,b) -> (b, a + b)) (0,1)
 fibonacci :: [Int]
 fibonacci = map snd fibHelper
+
+------------------
+-- * Exercise 9.12
+------------------
+-- Factorial func takes non-negative integer and returns product of all positive integers <= the input integer.  Use iterate to write a factorial function.
+-- (1,1) -> (2, 2)
+-- (2,2) -> (3, 6)
+-- (3,6) -> (4, 24)
+factHelper :: [(Int,Int)]
+factHelper = iterate (\(a,b) -> (a+1, b*(a+1))) (1,1)
+fact :: Int -> Int
+fact n = case n of
+            0 -> 1
+            _ -> snd (factHelper !! (n-1))
