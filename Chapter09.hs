@@ -117,3 +117,26 @@ fact n = case n of
 -- pick13 triples = map (\(x1,_,x3) -> (x1,x3)) triples
 pick13 :: [(R,R,R)] -> [(R,R)]
 pick13 triples = [(x1,x3) | (x1,_,x3) <- triples]
+
+------------------
+-- * Exercise 9.14
+------------------
+-- Suppose we throw a rock straight up in air at 15 m/s.
+-- Use list comprehension to make list of (time, position, velocity) triples
+-- of type [(R,R,R)] for an interval of time while the rock is in the air.
+-- Your list should have enough triples to let the data make a smooth graph.
+earthG :: Double
+earthG = 9.807
+rockThrowTriples :: [(R,R,R)]
+rockThrowTriples = iterate rockThrowHelper (0,0,0)
+rockThrowHelper :: (R,R,R) -> (R,R,R)
+rockThrowHelper (t,p,v) = (t+0.1, 0.5 * (-earthG) * (t+0.1)**2 + 15 * (t+0.1), 15 + (-earthG)*(t+0.1))
+
+------------------
+-- * Exercise 9.15
+------------------
+-- Tuples can be nested, like ((3,4),5). This is not a triple.
+-- Write a function toTriple that converts a pair whose first component
+-- is a pair into a triple.
+toTriple :: ((a,b),c) -> (a,b,c)
+toTriple pair = (fst (fst pair), snd (fst pair), snd pair)
