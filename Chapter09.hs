@@ -108,3 +108,12 @@ fact :: Int -> Int
 fact n = case n of
             0 -> 1
             _ -> snd (factHelper !! (n-1))
+
+------------------
+-- * Exercise 9.13
+------------------
+-- Write this function using list comprehension rather than a map
+-- pick13 :: [(R,R,R)] -> [(R,R)]
+-- pick13 triples = map (\(x1,_,x3) -> (x1,x3)) triples
+pick13 :: [(R,R,R)] -> [(R,R)]
+pick13 triples = [(x1,x3) | (x1,_,x3) <- triples]
