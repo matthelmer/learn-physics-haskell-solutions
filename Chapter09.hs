@@ -64,3 +64,25 @@ grades = [ ("Albert Einstein", 89)
          , ("Isaac Newton"  , 85)
          , ("Alan Turing"   , 91)
          ]
+-- > lookup "Albert Einstein" grades
+-- Just 89
+-- > lookup "Bob Dylan" grades
+-- Nothing
+
+------------------
+-- * Exercise 9.9
+------------------
+-- Translate into haskell:
+-- x(r, theta, phi) = r*(sin theta) * (cos phi)
+-- Use a triple for the input to function x. Give a type signature as well as function definition.
+funcX :: (R, R, R) -> R
+funcX (r, theta, phi) = r * (sin theta) * (cos phi)
+
+------------------
+-- * Exercise 9.10
+------------------
+-- A car starts from rest and accelrates 5m/s^2.  Make an infinite list of tvPairs of time-velocity pairs, one per second.
+tvPairs :: [(R,R)]
+tvPairs = iterate tvUpdate (0,0)
+tvUpdate :: (R,R) -> (R,R)
+tvUpdate (t,v) = (t+1,v+5)
