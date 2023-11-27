@@ -86,20 +86,38 @@ v0 = 20 *^ iHat
 v1 = 20 *^ iHat ^-^ 9.8 *^ kHat
 
 -- c) v(t) = 20 * iHat - 9.8 * t * kHat
+v t = 20 *^ iHat ^-^ (9.8 * t) *^ kHat
 
 -- d) r(t) = 30 * jHat + 20 * t * iHat - 4.9 * t**2 * kHat
+r t = 30 *^ jHat ^+^ (20 * t) *^ iHat ^-^ (4.9 * t**2) *^ kHat
 
 -- e) x(t) = iHat dotProduct r(t)
--- What are the haskell types of v0, v1, v, r, and x?
-
-
+x t = iHat <.> r t
+-- What are the Haskell types of v0, v1, v, r, and x?
+-- v0 :: Vec
+-- v1 :: Vec
+-- v  :: R -> Vec
+-- r  :: R -> Vec
+-- x  :: R -> R
 
 -------------------
 -- * Exercise 10.2
 -------------------
+-- Write an integration function for vector-valued functions of a real variable, similar to function:
+-- integral :: R -> (R -> R) -> R -> R -> R
+-- that we wrote in chapter 6.
+vecIntegral :: R            -- step size dt
+            -> (R -> Vec)   -- vector-valued function
+            -> R            -- lower limit
+            -> R            -- upper limit
+            -> Vec          -- result
+vecIntegral = undefined
+
+
 -------------------
 -- * Exercise 10.3
 -------------------
+
 -------------------
 -- * Exercise 10.4
 -------------------
