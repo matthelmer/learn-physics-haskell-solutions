@@ -137,7 +137,7 @@ projectilePos :: PosVec -> Velocity -> Time -> PosVec
 projectilePos r0 v0 = positionCA r0 v0 (9.81 *^ negateV kHat)
 maxHeight :: PosVec -> Velocity -> R
 maxHeight r0 v0 = maximum [zComp (projectilePos r0 v0 t) | t <- [0,0.01..1000]]
--- can test using different r0 and v0 values
+-- can test w/ different r0 and v0 values
 -- *> maxHeight (Vec 0 0 0) (Vec 0 0 100)
 -- *> maxHeight (Vec 10 10 0) (Vec (-10) 5 100)
 
@@ -145,3 +145,6 @@ maxHeight r0 v0 = maximum [zComp (projectilePos r0 v0 t) | t <- [0,0.01..1000]]
 -------------------
 -- * Exercise 10.4
 -------------------
+-- Write a function that, given initial velocity and constant acceleration, returns a function giving speed as a function of time.
+speedCA :: Velocity -> Acceleration -> Time -> R
+speedCA v0 a0 = \t -> magnitude (v0 ^+^ (t *^ a0))
