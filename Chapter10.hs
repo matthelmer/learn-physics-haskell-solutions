@@ -10,7 +10,11 @@ infixr 7 ^/
 infixr 7 <.>
 infixr 7 ><
 
-type R = Double
+type R              = Double
+type Time           = R
+type PosVec         = Vec
+type Velocity       = Vec
+type Acceleration   = Vec
 
 data Vec = Vec { xComp :: R  -- x component
                 ,yComp :: R  -- y component
@@ -80,18 +84,23 @@ magnitude v = sqrt(v <.> v)
 -------------------
 -- Translate following math definitions into Haskell:
 -- a) v0 = 20 * iHat
+v0 :: Vec
 v0 = 20 *^ iHat
 
 -- b) v1 = 20 * iHat - 9.8 * kHat
+v1 :: Vec
 v1 = 20 *^ iHat ^-^ 9.8 *^ kHat
 
 -- c) v(t) = 20 * iHat - 9.8 * t * kHat
+v :: R -> Vec
 v t = 20 *^ iHat ^-^ (9.8 * t) *^ kHat
 
 -- d) r(t) = 30 * jHat + 20 * t * iHat - 4.9 * t**2 * kHat
+r :: R -> Vec
 r t = 30 *^ jHat ^+^ (20 * t) *^ iHat ^-^ (4.9 * t**2) *^ kHat
 
 -- e) x(t) = iHat dotProduct r(t)
+x :: R -> R
 x t = iHat <.> r t
 -- What are the Haskell types of v0, v1, v, r, and x?
 -- v0 :: Vec
@@ -105,40 +114,34 @@ x t = iHat <.> r t
 -------------------
 -- Write an integration function for vector-valued functions of a real variable, similar to function:
 -- integral :: R -> (R -> R) -> R -> R -> R
+-- integral dt f a b = sum [f t * dt | t <- [a+dt/2, a+3*dt/2 .. b - dt/2]]
 -- that we wrote in chapter 6.
 vecIntegral :: R            -- step size dt
             -> (R -> Vec)   -- vector-valued function
             -> R            -- lower limit
             -> R            -- upper limit
             -> Vec          -- result
-vecIntegral = undefined
+vecIntegral dt vecFunc a b = sumV [vecFunc t ^* dt | t <- [a+dt/2, a+3*dt/2 .. b - dt/2]]
 
 
 -------------------
 -- * Exercise 10.3
 -------------------
+-- Write function that returns maximum z-component for projectile motion in which
+-- the initial position and initial velocity of object are given. Assume gravity
+-- acts in negative z-direction.
+-- need to figure out when the vector function derivative is zero
+positionCA :: PosVec -> Velocity -> Acceleration -> Time -> PosVec
+positionCA r0 v0 a0 t = 0.5 *^ t**2 *^ a0 ^+^ v0 ^* t ^+^ r0
+projectilePos :: PosVec -> Velocity -> Time -> PosVec
+projectilePos r0 v0 = positionCA r0 v0 (9.81 *^ negateV kHat)
+maxHeight :: PosVec -> Velocity -> R
+maxHeight r0 v0 = maximum [zComp (projectilePos r0 v0 t) | t <- [0,0.01..1000]]
+-- can test using different r0 and v0 values
+-- *> maxHeight (Vec 0 0 0) (Vec 0 0 100)
+-- *> maxHeight (Vec 10 10 0) (Vec (-10) 5 100)
+
 
 -------------------
 -- * Exercise 10.4
--------------------
--------------------
--- * Exercise 10.5
--------------------
--------------------
--- * Exercise 10.6
--------------------
--------------------
--- * Exercise 10.7
--------------------
--------------------
--- * Exercise 10.8
--------------------
--------------------
--- * Exercise 10.9
--------------------
--------------------
--- * Exercise 10.1
--------------------
--------------------
--- * Exercise 10.11
 -------------------
