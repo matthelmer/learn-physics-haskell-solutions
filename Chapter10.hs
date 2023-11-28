@@ -198,3 +198,12 @@ vec2DFromMagAngle (r,theta) = Vec2D (r * cos theta) (r * sin theta)
 -- Define function that computes projection of a vector into the xy plane. For example, xyProj (vec 6 9 7) should evaluate to vec 6 9 0.
 xyProj :: Vec -> Vec
 xyProj (Vec x y z) = Vec x y 0
+
+-------------------
+-- * Exercise 10.8
+-------------------
+-- Define a function that returns a triple (v, theta, phi) for a vector v in which :
+-- v = |v|
+-- theta = inv tan
+magAngles :: Vec -> (R,R,R)
+magAngles (Vec x y z) = (magnitude (Vec x y z), (atan2 (sqrt(x**2 + y**2)) z), (atan2 y x))
