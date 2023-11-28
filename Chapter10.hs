@@ -131,15 +131,20 @@ vecIntegral dt vecFunc a b = sumV [vecFunc t ^* dt | t <- [a+dt/2, a+3*dt/2 .. b
 -- the initial position and initial velocity of object are given. Assume gravity
 -- acts in negative z-direction.
 -- need to figure out when the vector function derivative is zero
-positionCA :: PosVec -> Velocity -> Acceleration -> Time -> PosVec
+
+-- given initial position, initial velocity, constant acceleration vector, and time, returns the position vector for time 't'
+positionCA :: PosVec -> Velocity -> Acceleration -> Time -> PosVec -- position as a function of time
 positionCA r0 v0 a0 t = 0.5 *^ t**2 *^ a0 ^+^ v0 ^* t ^+^ r0
+
+-- given initial position vector, initial velocity vector, returns function positionCA to calculate the position of projectile under earth's gravity at time 't'
 projectilePos :: PosVec -> Velocity -> Time -> PosVec
 projectilePos r0 v0 = positionCA r0 v0 (9.81 *^ negateV kHat)
-maxHeight :: PosVec -> Velocity -> R
-maxHeight r0 v0 = maximum [zComp (projectilePos r0 v0 t) | t <- [0,0.01..1000]]
+
 -- can test w/ different r0 and v0 values
 -- *> maxHeight (Vec 0 0 0) (Vec 0 0 100)
 -- *> maxHeight (Vec 10 10 0) (Vec (-10) 5 100)
+maxHeight :: PosVec -> Velocity -> R
+maxHeight r0 v0 = maximum [zComp (projectilePos r0 v0 t) | t <- [0,0.01..1000]]
 
 
 -------------------
@@ -148,3 +153,20 @@ maxHeight r0 v0 = maximum [zComp (projectilePos r0 v0 t) | t <- [0,0.01..1000]]
 -- Write a function that, given initial velocity and constant acceleration, returns a function giving speed as a function of time.
 speedCA :: Velocity -> Acceleration -> Time -> R
 speedCA v0 a0 = \t -> magnitude (v0 ^+^ (t *^ a0))
+
+-------------------
+-- * Exercise 10.5
+-------------------
+-- Write a type signature and function definition for projectileVel to compute the velocity of a projectile at a given time.
+-- Do in the spirit of projectilePos
+
+-- Position as a function of time (constant accel.):
+-- r(t) = 1/2 *^ a0*t^2 + v(0)*t
+--
+-- Velocity as a function of time (constant accel.):
+-- v(t) = a0*t + v(0)
+
+velocityCA :: Velocity -> Acceleration -> Time -> Velocity
+velocityCA v0 a0 t = a0 ^* t ^+^ v0
+projectileVel :: Velocity -> Time -> Velocity
+projectileVel v0 = velocityCA v0 (9.81 *^ negateV kHat)
