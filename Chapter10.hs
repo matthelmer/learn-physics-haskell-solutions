@@ -16,6 +16,7 @@ type PosVec         = Vec
 type Velocity       = Vec
 type Acceleration   = Vec
 
+
 data Vec = Vec { xComp :: R  -- x component
                 ,yComp :: R  -- y component
                 ,zComp :: R  -- z component
@@ -170,3 +171,23 @@ velocityCA :: Velocity -> Acceleration -> Time -> Velocity
 velocityCA v0 a0 t = a0 ^* t ^+^ v0
 projectileVel :: Velocity -> Time -> Velocity
 projectileVel v0 = velocityCA v0 (9.81 *^ negateV kHat)
+
+-------------------
+-- * Exercise 10.6
+-------------------
+-- Define a new type Vec2D for 2-d vectors.
+data Vec2D = Vec2D { xComp2D :: R
+                    ,yComp2D :: R
+                   } deriving (Eq)
+instance Show Vec2D where
+    show (Vec2D x y) = "vec2D " ++ showDouble x ++ " "
+                              ++ showDouble y
+vec2D ::   R  -- x component
+        -> R  -- y component
+        -> Vec2D
+vec2D = Vec2D
+-- Then define functions to find magnitude and angle of a two-dimensional vector from a magnitude and angle. You may want to use atan or atan2 functions.
+magAngleFromVec2D :: Vec2D -> (R,R)
+magAngleFromVec2D (Vec2D x y) = (sqrt (x**2 + y**2), atan2 y x)
+vec2DFromMagAngle :: (R,R) -> Vec2D
+vec2DFromMagAngle (r,theta) = Vec2D (r * cos theta) (r * sin theta)
