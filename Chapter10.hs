@@ -2,6 +2,8 @@
 
 module SimpleVec where
 
+import Graphics.Gnuplot.Simple
+
 infixl 6 ^+^
 infixl 6 ^-^
 infixr 7 *^
@@ -207,3 +209,55 @@ xyProj (Vec x y z) = Vec x y 0
 -- theta = inv tan
 magAngles :: Vec -> (R,R,R)
 magAngles (Vec x y z) = (magnitude (Vec x y z), (atan2 (sqrt(x**2 + y**2)) z), (atan2 y x))
+
+-------------------
+-- * Exercise 10.9
+-------------------
+-- Velocity and acceleration of ball launched from the ground are
+-- vBall(t) = v0*t + 1/2 * g * t^2
+-- aBall(t) = g
+-- Suppose ball launched w/ initial speed of 25 m/s at an angle of 52 degrees above horizontal.
+-- Choose coordinate system and define constant 9.8m/s^2 acceleration of gravity toward center of earth:
+gEarth :: Vec
+gEarth = Vec 0 0 (-9.8)
+
+-- next define function that gives velocity of the ball as function of time.
+vBall :: R -> Vec
+vBall t = let v0 = Vec (25 * cos (52 * pi / 180)) 0 (25 * sin (52 * pi / 180))
+          in v0 ^*t ^+^ (0.5 *^ t**2 *^ gEarth)
+
+-- next define function that gives rate of change of speed of the ball as function of time.
+-- may want to use speedRateChange for this.
+speedRateChange :: Vec -> Vec -> R
+speedRateChange v a = (v <.> a) / magnitude v
+speedRateChangeBall :: R -> R
+speedRateChangeBall t = speedRateChange (vBall t) gEarth
+-- At what point in ball's motion is rate of change of its speed equal to zero?  The speed change being equal to zero implies dot product of 'vBall' and 'gEarth' is zero, i.e. they are orthogonal, which will occur at the peak of the ball's motion.
+-- Is its's velocity zero at that point?  No, because the velocity vector will have non-zero components due to direction changing.
+-- Use plotFunc from chapter 7 to make a graph of the rate of change of the speed of th ball as a function of time over the four seconds it is in the air.
+ballSpeedChangePlot :: IO ()
+ballSpeedChangePlot = plotFunc [] ([0,0.01..5]) speedRateChangeBall
+
+-------------------
+-- * Exercise 10.10
+-------------------
+-- Consider a particle in uniform circular motion. If motion takes place in xy-plane with the origin at the center of the circle, we can write the position of the particle as:
+-- r_UCM(t) = R(cos w t iHat + sin w t jHat)
+-- where R is the radius of the circle and w is angular velocity of motion.
+
+-- Velocity of the particle can be found by taking derivative of position wrt time.
+-- v_UCM(t) = w R (-sin w t iHat + cos w t jHat)
+
+-- Acceleration of the particle can be found by taking derivative of velocity wrt time.
+-- a_UCM(t) = -w**2 R (cos w t iHat + sin w t jHat)
+
+-- This particle in UCM has speed v_UCM(t) = w*R, which does not depend on time.
+-- Using R = 2m, and w = 6 rad/s, encode the following in Haskell:
+-- Position:
+rUCM :: R -> Vec
+rUCM t = 2 *^ (Vec (cos (6 * t)) (sin (6 * t)) 0)
+
+-- Velocity:
+-- Acceleration:
+-- Use aParallel to confirm tangential component of acceleration is 0 at different times.
+-- Use aPerp to confirm magnitude of radial compoment of acceleration is [v_UCM(t)]^2 / R = w^2 * R
