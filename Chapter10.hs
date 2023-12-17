@@ -199,7 +199,7 @@ vec2DFromMagAngle (r,theta) = Vec2D (r * cos theta) (r * sin theta)
 -------------------
 -- Define function that computes projection of a vector into the xy plane. For example, xyProj (vec 6 9 7) should evaluate to vec 6 9 0.
 xyProj :: Vec -> Vec
-xyProj (Vec x y z) = Vec x y 0
+xyProj (Vec x y _) = Vec x y 0
 
 -------------------
 -- * Exercise 10.8
@@ -241,23 +241,39 @@ ballSpeedChangePlot = plotFunc [] ([0,0.01..5]) speedRateChangeBall
 -------------------
 -- * Exercise 10.10
 -------------------
--- Consider a particle in uniform circular motion. If motion takes place in xy-plane with the origin at the center of the circle, we can write the position of the particle as:
--- r_UCM(t) = R(cos w t iHat + sin w t jHat)
--- where R is the radius of the circle and w is angular velocity of motion.
+-- Consider a particle in uniform circular motion. If motion takes place in xy-plane with the origin at the center of the circle (radius R, angular vel. w),
 
--- Velocity of the particle can be found by taking derivative of position wrt time.
+-- We can write the position of the particle as:
+-- r_UCM(t) = R(cos w t iHat + sin w t jHat)
+
+-- Velocity of the particle can be found by taking derivative of position wrt time:
 -- v_UCM(t) = w R (-sin w t iHat + cos w t jHat)
 
--- Acceleration of the particle can be found by taking derivative of velocity wrt time.
+-- Acceleration of the particle can be found by taking derivative of velocity wrt time:
 -- a_UCM(t) = -w**2 R (cos w t iHat + sin w t jHat)
 
 -- This particle in UCM has speed v_UCM(t) = w*R, which does not depend on time.
 -- Using R = 2m, and w = 6 rad/s, encode the following in Haskell:
+
 -- Position:
 rUCM :: R -> Vec
 rUCM t = 2 *^ (Vec (cos (6 * t)) (sin (6 * t)) 0)
 
 -- Velocity:
+vUCM :: R -> Vec
+vUCM t = 6 *^ 2 *^ (Vec (-sin (6 * t)) (cos (6 * t)) 0)
+
 -- Acceleration:
+aUCM :: R -> Vec
+aUCM t = negateV (6**2 *^ 2 *^ (Vec (cos (6 * t)) (sin (6 * t)) 0))
+
 -- Use aParallel to confirm tangential component of acceleration is 0 at different times.
+aParallel :: Vec -> Vec -> Vec
+aParallel v a = let vHat = v ^/ magnitude v
+                in (vHat <.> a) *^ vHat
 -- Use aPerp to confirm magnitude of radial compoment of acceleration is [v_UCM(t)]^2 / R = w^2 * R
+aPerp :: Vec -> Vec -> Vec
+aPerp v a = a ^-^ aParallel v a
+-- can confirm by evaluating:
+-- magnitude(aPerp (vUCM 1) (aUCM 1)) is equal to 72
+
