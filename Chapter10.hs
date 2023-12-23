@@ -18,6 +18,10 @@ type PosVec         = Vec
 type Velocity       = Vec
 type Acceleration   = Vec
 
+type VecDerivative = (R -> Vec) -> R -> Vec
+vecDerivative :: R -> VecDerivative
+vecDerivative dt v t = (v (t + dt/2) ^-^ v (t - dt/2)) ^/ dt
+
 
 data Vec = Vec { xComp :: R  -- x component
                 ,yComp :: R  -- y component
@@ -277,3 +281,45 @@ aPerp v a = a ^-^ aParallel v a
 -- can confirm by evaluating:
 -- magnitude(aPerp (vUCM 1) (aUCM 1)) is equal to 72
 
+-------------------
+-- * Exercise 10.11
+-------------------
+-- Non-uniform Circular Motion, radius R, xy-plane
+-- Position of particle, where theta t gives angle particle makes with x-axis at time, t:
+-- rNCM(t) = R[cos theta t ihat + sin theta t jhat]
+rNCM :: (R, R -> R) -> R -> Vec
+rNCM (radius, theta) t = radius *^ (Vec (cos (theta t)) (sin (theta t)) 0)
+
+-- Use aPerpFromPosition, which finds radial component of acceleration for a particle whose position can be given as function of time,
+aPerpFromPosition :: R -> (R -> Vec) -> R -> Vec
+aPerpFromPosition epsilon r t
+    = let v = vecDerivative epsilon r
+          a = vecDerivative epsilon v
+      in aPerp (v t) (a t)
+
+-- for radius R = 2m, and
+-- theta(t) = 1/2 * (3 rad / s**2) * t**2
+thetaNCM = \t -> (1 / 2) * 3 * t**2
+
+-- use aPerpFromPosition to find radial component of acceleration at t=2 seconds.
+-- evaluate in ghci as:
+-- SimpleVec> aPerpFromPosition 0.01 (rNCM (2, thetaNCM)) 2
+-- vec (-69.11249319950575) 20.109352256620774 0.0
+
+-- Find the speed of the particle at that time.
+-- Let's use velocity derivative of the position
+speedAtTime :: R -> (R, R -> R) -> R -> R
+speedAtTime epsilon (radius, theta) t
+    = let vd = vecDerivative epsilon (rNCM (radius, theta))
+      in magnitude (vd t)
+
+-- evaluate the speed at t=2:
+-- speedAtTime 0.01 (2, thetaNCM) 2
+-- Finally, show that the magnitude of the radial component is equal to the square of its speed divided by the radius of the circle.
+checkRadialAccel :: R -> (R, R -> R) -> R -> Bool
+checkRadialAccel epsilon (radius, theta) t
+    = let radialAccelVec = aPerpFromPosition epsilon (rNCM (radius, theta)) t
+                   speed = speedAtTime epsilon (radius, theta) t
+          radialAccelMag = magnitude radialAccelVec
+      in radialAccelMag == (speed**2) / radius
+-- checkRadialAccel 0.01 (2, thetaNCM) 2
