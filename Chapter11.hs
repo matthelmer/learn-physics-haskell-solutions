@@ -39,3 +39,30 @@ plotEx1 = plotFunc [Title "Exercise 11.1: y = x^2"
                     ,PNG "exercise11-1.png"
                     ,Key Nothing
                     ] xRange y
+
+-------------------
+-- * Exercise 11.2
+-------------------
+-- Make a plot of the cosine and sine functions, together on a single set of axes, from x=0 to x=10
+x2Range :: [R]
+x2Range = [0,0.1..10]
+
+plotEx2 :: IO ()
+plotEx2 = plotFuncs [] x2Range [cos,sin]
+
+-------------------
+-- * Exercise 11.3
+-------------------
+-- Figure out how to plot the list of points txPairs below.  Make plot with a title and axis labels (with units).
+ts :: [R]
+ts = [0,0.1..6]
+
+txPairs :: [(R,R)]
+txPairs = [(t,30 * t - 4.99 * t**2) | t <- ts]
+
+plotEx3 :: IO ()
+plotEx3 = plotPath [Title "Exercise 11.3"
+                   ,XLabel "t"
+                   ,YLabel "value"
+                   ,Key Nothing
+                   ] txPairs
