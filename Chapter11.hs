@@ -66,3 +66,18 @@ plotEx3 = plotPath [Title "Exercise 11.3"
                    ,YLabel "value"
                    ,Key Nothing
                    ] txPairs
+
+
+-------------------
+-- * Exercise 11.4
+-------------------
+-- Write a function that approximates the sine function by the first four terms in its Taylor expansion. Add axis labels, title, etc.
+-- x - (x^3 / 3!) + (x^5 / 5!) - (x^7 / 7!)
+fact :: Integer -> R
+fact n = fromIntegral(product [n,n-1..1])
+
+approxsin :: R -> R
+approxsin x = x - x**3 / (fact 3) + x**5 / (fact 5) - x**7 / (fact 7)
+
+plotEx4 :: IO ()
+plotEx4 = plotFuncs [] [-4,-3.99..4] [sin, approxsin]
