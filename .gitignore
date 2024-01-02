@@ -8,3 +8,5 @@
 
 .ghc.environment*
 *.png
+*.hi
+*.o

@@ -45,7 +45,7 @@ plotEx1 = plotFunc [Title "Exercise 11.1: y = x^2"
 -------------------
 -- Make a plot of the cosine and sine functions, together on a single set of axes, from x=0 to x=10
 x2Range :: [R]
-x2Range = [0,0.1..10]
+x2Range = [0,0.001..1009]
 
 plotEx2 :: IO ()
 plotEx2 = plotFuncs [] x2Range [cos,sin]

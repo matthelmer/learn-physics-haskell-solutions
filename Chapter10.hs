@@ -1,6 +1,6 @@
 {-# OPTIONS -Wall #-}
 
-module SimpleVec where
+module Chapter10 where
 
 import Graphics.Gnuplot.Simple
 
