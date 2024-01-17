@@ -1,13 +1,16 @@
 {-# OPTIONS_GHC -Wall #-}
 
+module Main where
+
+
 import Graphics.Gloss
 
 displayMode :: Display
 displayMode = InWindow "Axes" (1000, 700) (10, 10)
 
 axes :: Picture
-axes = Pictures [Color red $ Line [(0, 0), (100, 0)]
-                ,Color green $ Line [(0, 0), (0, 100)]
+axes = Pictures [Color red   $ Line [(0, 0), (100,   0)]
+                ,Color green $ Line [(0, 0), (  0, 100)]
                 ]
 
 blueCircle :: Picture
@@ -25,7 +28,7 @@ wholePicture = Pictures [Translate (-120) 0 blueCircle
                         ]
 
 main :: IO ()
-main = display displayMode black wholePicture
+main = display displayMode black axes
 
 
 
