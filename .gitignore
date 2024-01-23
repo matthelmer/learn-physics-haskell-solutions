@@ -1,13 +1,43 @@
 # Environment files
 .env
-*.sqlite
+.ghc.environment.*
 
+# Stack build artifacts
+.stack-work/
 
-*.swp
-.DS_Store
+# Cabal build artifacts
+**dist-newstyle/
+Chapter13/dist-newstyle/
+cabal.project.local
+cabal.project.local~
 
-.ghc.environment*
-*.png
+# Build artifacts for GHC
 *.hi
 *.o
+*.dyn_hi
+*.dyn_o
 
+# Executable files
+*.exe
+*.out
+*.bin
+
+# Logs and databases
+*.log
+*.sqlite
+
+# IDE and editor files
+# (add patterns for your specific IDE if needed)
+*.swp
+*.swo
+*~
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Other common directories to ignore
+tags
+*.tix
+.hpc
+*.png
