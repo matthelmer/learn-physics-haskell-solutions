@@ -56,6 +56,14 @@ yDisk t = 80 * t - 4.9 * t**2
 -- * Exercise 13.3
 -------------------
 -- Use animate to make the red disk oscillate left and right. Then change your code to make the red disk orbit in a circle. Can you make the red disk move in an ellipse?
+oscillatingMotion :: Float -> Picture
+oscillatingMotion t = Translate (100 * sin t) (0) redDisk
+
+circularMotion :: Float -> Picture
+circularMotion t = Translate (100 * cos t) (100 * sin t) redDisk
+
+ellipticalMotion :: Float -> Picture
+ellipticalMotion t = Translate (300 * cos t) (100 * sin t) redDisk
 
 main :: IO ()
-main = animate displayMode black projectileMotion
+main = animate displayMode black ellipticalMotion
