@@ -65,5 +65,13 @@ circularMotion t = Translate (100 * cos t) (100 * sin t) redDisk
 ellipticalMotion :: Float -> Picture
 ellipticalMotion t = Translate (300 * cos t) (100 * sin t) redDisk
 
+
+-------------------
+-- * Exercise 13.4
+-------------------
+-- Use animate to achieve the same motion of red disk we achieved with simulate in listing 13-1.
+redDiskAnimatedSimulation :: Float -> Picture
+redDiskAnimatedSimulation t = Translate (10*t) ((-5)*t) redDisk
+
 main :: IO ()
-main = animate displayMode black ellipticalMotion
+main = animate displayMode black redDiskAnimatedSimulation
