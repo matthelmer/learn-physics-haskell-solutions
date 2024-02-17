@@ -72,6 +72,31 @@ ellipticalMotion t = Translate (300 * cos t) (100 * sin t) redDisk
 -- Use animate to achieve the same motion of red disk we achieved with simulate in listing 13-1.
 redDiskAnimatedSimulation :: Float -> Picture
 redDiskAnimatedSimulation t = Translate (10*t) ((-5)*t) redDisk
+--main :: IO ()
+--main = animate displayMode black redDiskAnimatedSimulation
+
+-------------------
+-- * Exercise 13.5
+-------------------
+-- Use simulate to do something interesting/creative.
+
+-- updates per second of real time
+rate :: Int
+rate = 1
+
+-- model
+type State = (Float,Float)
+
+initialState :: State
+initialState = (100,0)
+
+-- function that describes what pic to produce given a value of type model
+displayFunc :: State -> Picture
+displayFunc (x,y) = Translate x y wholePicture
+
+updateFunc :: Float -> State -> State
+updateFunc dt (x,y) = (10 * cos(x + dt), 10 * sin(y + dt))
+
 
 main :: IO ()
-main = animate displayMode black redDiskAnimatedSimulation
+main = simulate displayMode black rate initialState displayFunc (\_ -> updateFunc)
