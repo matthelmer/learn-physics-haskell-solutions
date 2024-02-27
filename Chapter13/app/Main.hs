@@ -40,7 +40,7 @@ wholePicture = Pictures [Translate 0 0 whiteFlag
 -------------------
 -- Use animate to make a simple animation.
 redDisk :: Picture
-redDisk = Color red (disk 25)
+redDisk = Color red (disk 10)
 
 projectileMotion :: Float -> Picture
 projectileMotion t = Translate (xDisk t) (yDisk t) wholePicture
@@ -60,11 +60,13 @@ oscillatingMotion :: Float -> Picture
 oscillatingMotion t = Translate (100 * sin t) (0) redDisk
 
 circularMotion :: Float -> Picture
-circularMotion t = Translate (100 * cos t) (100 * sin t) redDisk
+circularMotion t = Translate (500 * cos t) (500 * sin t) redDisk
 
 ellipticalMotion :: Float -> Picture
 ellipticalMotion t = Translate (300 * cos t) (100 * sin t) redDisk
 
+--main :: IO ()
+--main = animate displayMode black ellipticalMotion
 
 -------------------
 -- * Exercise 13.4
@@ -81,22 +83,47 @@ redDiskAnimatedSimulation t = Translate (10*t) ((-5)*t) redDisk
 -- Use simulate to do something interesting/creative.
 
 -- updates per second of real time
-rate :: Int
-rate = 1
+--rate :: Int
+--rate = 35
 
 -- model
-type State = (Float,Float)
+--type State = (Float,Float)
 
-initialState :: State
-initialState = (100,0)
+--initialState :: State
+--initialState = (0,0)
 
 -- function that describes what pic to produce given a value of type model
+--displayFunc :: State -> Picture
+--displayFunc (x,y) = Translate x y redDisk
+
+--updateFunc :: Float -> State -> State
+--updateFunc dt (x,y) = (100 * sin(x**2 - y**2 + 5.655),
+--                      100 * cos(2 * x * y + 5.16))
+
+--main :: IO ()
+--main = simulate displayMode black rate initialState displayFunc (\_ -> updateFunc)
+
+-------------------
+-- * Exercise 13.6
+-------------------
+-- Modify Listing 13-2 code so one meter is represented by 10 pixels, instead of 1 pixel. Change initial velocity so you can see it.
+rate :: Int
+rate = 24
+type Position = (Float,Float)
+type Velocity = (Float,Float)
+type State = (Position,Velocity)
+
+initialState :: State
+initialState = ((0,0),(4,8)) -- position and velocity, each x,y values
+
 displayFunc :: State -> Picture
-displayFunc (x,y) = Translate x y wholePicture
+displayFunc ((x,y),_) = Translate x y redDisk
 
 updateFunc :: Float -> State -> State
-updateFunc dt (x,y) = (10 * cos(x + dt), 10 * sin(y + dt))
-
+updateFunc dt ((x,y),(vx,vy))
+    = (( x + 10 * vx * dt, y + 10 * vy * dt)
+      ,(vx          ,vy - 9.8 * dt))
 
 main :: IO ()
-main = simulate displayMode black rate initialState displayFunc (\_ -> updateFunc)
+main = simulate displayMode black rate initialState displayFunc
+       (\_ -> updateFunc)
