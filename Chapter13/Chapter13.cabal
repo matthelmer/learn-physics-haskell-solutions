@@ -70,6 +70,8 @@ executable Chapter13
     build-depends:    base ^>=4.17.2.1
                     , gloss
                     , not-gloss
+                    , linear
+                    , spatial-math
 
     -- Directories containing source files.
     hs-source-dirs:   app
