@@ -148,14 +148,21 @@ axes = VisObjects [Line Nothing [V3 0 0 0, V3 1 0 0] red
                   ,Line Nothing [V3 0 0 0, V3 0 0 1] blue
                   ]
 
-orient :: VisObject R -> VisObject R
-orient pict = RotEulerDeg (Euler 0 0 270) $ pict
+--orient :: VisObject R -> VisObject R
+--orient pict = RotEulerDeg (Euler 0 0 270) $ pict
 
-main :: IO ()
-main = display defaultOpts (orient axes)
+--main :: IO ()
+--main = display defaultOpts (orient axes)
 
 -------------------
 -- * Exercise 13.9
 -------------------
 -- Modify the rotating cube animation to make the rotation occur clockwise about the x-axis instead of counterclockwise.
+rotatingCube :: Float -> VisObject Float
+rotatingCube t = RotEulerRad (Euler 0 0 (-t)) (Cube 1 Solid blue)
 
+orient :: VisObject Float -> VisObject Float
+orient pict = RotEulerDeg (Euler 270 180 0) $ pict
+
+main :: IO ()
+main = animate defaultOpts (orient . rotatingCube)
