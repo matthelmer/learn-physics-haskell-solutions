@@ -109,22 +109,22 @@ redDiskAnimatedSimulation t = Gloss.Translate (10*t) ((-5)*t) redDisk
 -- * Exercise 13.6
 -------------------
 -- Modify Listing 13-2 code so one meter is represented by 10 pixels, instead of 1 pixel. Change initial velocity so you can see it.
-rate :: Int
-rate = 24
-type Position = (Float,Float)
-type Velocity = (Float,Float)
-type State = (Position,Velocity)
+--rate :: Int
+--rate = 24
+--type Position = (Float,Float)
+--type Velocity = (Float,Float)
+--type State = (Position,Velocity)
 
-initialState :: State
-initialState = ((0,0),(4,8)) -- position and velocity, each x,y values
+--initialState :: State
+--initialState = ((0,0),(4,8)) -- position and velocity, each x,y values
 
-displayFunc :: State -> Gloss.Picture
-displayFunc ((x,y),_) = Gloss.Translate x y redDisk
+--displayFunc :: State -> Gloss.Picture
+--displayFunc ((x,y),_) = Gloss.Translate x y redDisk
 
-updateFunc :: Float -> State -> State
-updateFunc dt ((x,y),(vx,vy))
-    = (( x + 10 * vx * dt, y + 10 * vy * dt)
-      ,(vx          ,vy - 9.8 * dt))
+--updateFunc :: Float -> State -> State
+--updateFunc dt ((x,y),(vx,vy))
+--    = (( x + 10 * vx * dt, y + 10 * vy * dt)
+--      ,(vx          ,vy - 9.8 * dt))
 
 -- main :: IO ()
 -- main = Gloss.simulate displayMode Gloss.black rate initialState displayFunc
@@ -135,7 +135,7 @@ updateFunc dt ((x,y),(vx,vy))
 -------------------
 -- Try to use simulate to make the red disk oscillate left and right without explicitly giving it an oscillating function like sin or cos.
 oscillatingLikeMotion :: Float -> Gloss.Picture
-oscillatingLikeMotion t = Gloss.Translate (100 * sin t) 0 redDisk
+oscillatingLikeMotion t = Gloss.Translate ( t) 0 redDisk
 
 -------------------
 -- * Exercise 13.8
@@ -164,5 +164,32 @@ rotatingCube t = RotEulerRad (Euler 0 0 (-t)) (Cube 1 Solid blue)
 orient :: VisObject Float -> VisObject Float
 orient pict = RotEulerDeg (Euler 270 180 0) $ pict
 
+--main :: IO ()
+--main = animate defaultOpts (orient . rotatingCube)
+
+-------------------
+-- * Exercise 13.10
+-------------------
+-- Write an experimental program, similar to Listing 13-3, using the gloss function simulate to understand how gloss’s simulate uses the update function. Use the same expressions for updateFunc and State that we used in Listing 13-3. You will need to change the values of displayFunc and main. Use a rate of 2 instead of a dt of 0.5. When you run this, you should see that the times passed in by gloss’s simulate are time steps that are all close to 0.5.
+
+type State = (Int,[Float])
+
+-- updates / sec
+rate :: Int
+rate = 2
+
+initialState :: State
+initialState = (0,[])
+
+--displayFunc :: State -> VisObject Double
+--displayFunc (n,ts) = Text2d (show n ++ " " ++ show (take 4 ts))
+--                     (100,100) Fixed9By15 orange
+
+displayFunc :: State -> Gloss.Picture
+displayFunc (n,ts) = Gloss.Text (show n ++ " " ++ show (take 4 ts))
+
+updateFunc :: Float -> State -> State
+updateFunc t (n,ts) = (n+1,t:ts)
+
 main :: IO ()
-main = animate defaultOpts (orient . rotatingCube)
+main = Gloss.simulate displayMode Gloss.red rate initialState displayFunc (\_ -> updateFunc)
