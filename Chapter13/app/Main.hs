@@ -134,19 +134,34 @@ redDiskAnimatedSimulation t = Gloss.Translate (10*t) ((-5)*t) redDisk
 -- * Exercise 13.7
 -------------------
 -- Try to use simulate to make the red disk oscillate left and right without explicitly giving it an oscillating function like sin or cos.
-oscillatingLikeMotion :: Float -> Gloss.Picture
-oscillatingLikeMotion t = Gloss.Translate ( t) 0 redDisk
+
+type Position = (Float,Float)
+
+initialPosition :: Position
+initialPosition = (-1,0)
+
+displayFunc :: Position -> Gloss.Picture
+displayFunc (x,y) = Gloss.Translate x y redDisk
+
+updateFunc :: Float -> Position -> Position
+updateFunc _ (x,y) = ((-x), y)
+
+rate :: Int
+rate = 2
+
+main :: IO ()
+main = Gloss.simulate displayMode Gloss.black rate initialPosition displayFunc (\_ -> updateFunc)
 
 -------------------
 -- * Exercise 13.8
 -------------------
 -- Rewrite the 3D axes code so that the x-axis points to the right, the y-axis points upward, and the z-axis points out of the page. This is my second favorite coordinate system.
 
-axes :: VisObject R
-axes = VisObjects [Line Nothing [V3 0 0 0, V3 1 0 0] red
-                  ,Line Nothing [V3 0 0 0, V3 0 1 0] green
-                  ,Line Nothing [V3 0 0 0, V3 0 0 1] blue
-                  ]
+--axes :: VisObject R
+--axes = VisObjects [Line Nothing [V3 0 0 0, V3 1 0 0] red
+--                  ,Line Nothing [V3 0 0 0, V3 0 1 0] green
+--                  ,Line Nothing [V3 0 0 0, V3 0 0 1] blue
+--                  ]
 
 --orient :: VisObject R -> VisObject R
 --orient pict = RotEulerDeg (Euler 0 0 270) $ pict
@@ -158,11 +173,11 @@ axes = VisObjects [Line Nothing [V3 0 0 0, V3 1 0 0] red
 -- * Exercise 13.9
 -------------------
 -- Modify the rotating cube animation to make the rotation occur clockwise about the x-axis instead of counterclockwise.
-rotatingCube :: Float -> VisObject Float
-rotatingCube t = RotEulerRad (Euler 0 0 (-t)) (Cube 1 Solid blue)
+--rotatingCube :: Float -> VisObject Float
+--rotatingCube t = RotEulerRad (Euler 0 0 (-t)) (Cube 1 Solid blue)
 
-orient :: VisObject Float -> VisObject Float
-orient pict = RotEulerDeg (Euler 270 180 0) $ pict
+--orient :: VisObject Float -> VisObject Float
+--orient pict = RotEulerDeg (Euler 270 180 0) $ pict
 
 --main :: IO ()
 --main = animate defaultOpts (orient . rotatingCube)
@@ -172,24 +187,20 @@ orient pict = RotEulerDeg (Euler 270 180 0) $ pict
 -------------------
 -- Write an experimental program, similar to Listing 13-3, using the gloss function simulate to understand how gloss’s simulate uses the update function. Use the same expressions for updateFunc and State that we used in Listing 13-3. You will need to change the values of displayFunc and main. Use a rate of 2 instead of a dt of 0.5. When you run this, you should see that the times passed in by gloss’s simulate are time steps that are all close to 0.5.
 
-type State = (Int,[Float])
+--type State = (Int,[Float])
 
 -- updates / sec
-rate :: Int
-rate = 2
+--rate :: Int
+--rate = 2
 
-initialState :: State
-initialState = (0,[])
+--initialState :: State
+--initialState = (0,[])
 
---displayFunc :: State -> VisObject Double
---displayFunc (n,ts) = Text2d (show n ++ " " ++ show (take 4 ts))
---                     (100,100) Fixed9By15 orange
+--displayFunc :: State -> Gloss.Picture
+--displayFunc (n,ts) = Gloss.Text (show n ++ " " ++ show (take 4 ts))
 
-displayFunc :: State -> Gloss.Picture
-displayFunc (n,ts) = Gloss.Text (show n ++ " " ++ show (take 4 ts))
+--updateFunc :: Float -> State -> State
+--updateFunc t (n,ts) = (n+1,t:ts)
 
-updateFunc :: Float -> State -> State
-updateFunc t (n,ts) = (n+1,t:ts)
-
-main :: IO ()
-main = Gloss.simulate displayMode Gloss.red rate initialState displayFunc (\_ -> updateFunc)
+--main :: IO ()
+--main = Gloss.simulate displayMode Gloss.red rate initialState displayFunc (\_ -> updateFunc)
