@@ -42,7 +42,7 @@ wholePicture = Gloss.Pictures [Gloss.Translate 0 0 whiteFlag
 -------------------
 -- Use animate to make a simple animation.
 redDisk :: Gloss.Picture
-redDisk = Gloss.Color Gloss.red (disk 10)
+redDisk = Gloss.Color Gloss.red (disk 295)
 
 projectileMotion :: Float -> Gloss.Picture
 projectileMotion t = Gloss.Translate (xDisk t) (yDisk t) wholePicture
@@ -138,7 +138,10 @@ redDiskAnimatedSimulation t = Gloss.Translate (10*t) ((-5)*t) redDisk
 type Position = (Float,Float)
 
 initialPosition :: Position
-initialPosition = (-1,0)
+initialPosition = (-200,0)
+
+blueDisk :: Gloss.Picture
+blueDisk = Gloss.Color Gloss.yellow (disk 200)
 
 displayFunc :: Position -> Gloss.Picture
 displayFunc (x,y) = Gloss.Translate x y redDisk
